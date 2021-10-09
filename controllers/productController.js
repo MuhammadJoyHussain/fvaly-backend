@@ -20,18 +20,19 @@ module.exports.getProducts = asyncHandler(async (req, res, next) => {
 module.exports.createProduct = asyncHandler(async (req, res, next) => {
     try {
         const body = req.body;
-        const upload = await cloudinary.uploader.upload(req.file.path);
+        // const upload = await cloudinary.uploader.upload(req.file.path);
 
-        body.image = upload.public_id;
+        // body.image = upload.public_id;
         const product = new Product(body);
 
         await product.save();
         return res.status(201).json({
             success: true,
-            data: product
+            data: product,
+            error: false
         });
     } catch (err) {
-        return next(new ErrorResponse('Fild can not be blank'), 404);
+        return next(err);
     }
 });
 
@@ -47,6 +48,23 @@ module.exports.getProduct = asyncHandler(async (req, res, next) => {
         success: true,
         data: product
     });
+});
+
+module.exports.updateProduct = asyncHandler(async (req, res, next) => {
+    let product = await Product.findById(req.params.id);
+
+    if (!product) {
+        return next(
+            new ErrorResponse(`Product not found with id of ${req.params.id}`, 404)
+        );
+    }
+
+    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({ success: true, data: product, error: false });
 });
 
 module.exports.deleteProduct = asyncHandler(async (req, res, next) => {
@@ -65,4 +83,3 @@ module.exports.deleteProduct = asyncHandler(async (req, res, next) => {
         data: {}
     });
 });
-

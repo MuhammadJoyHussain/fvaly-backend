@@ -1,6 +1,6 @@
 const accessControl = require('../accesscontrol');
 const express = require('express');
-const { createProduct, getProducts, getProduct, deleteProduct } = require('../controllers/productController');
+const { createProduct, getProducts, getProduct, updateProduct, deleteProduct } = require('../controllers/productController');
 const uploader = require('../lib/multer');
 
 const router = express.Router();
@@ -21,8 +21,13 @@ router
     .get(getProduct)
     .delete(
         protect,
-        accessControl.grantAccess('deleteAny', 'product'),
+        accessControl.grantAccess('deleteOwn', 'product'),
         deleteProduct
+    )
+    .put(
+        protect,
+        accessControl.grantAccess('updateAny', 'product'),
+        updateProduct
     );
 
 module.exports = router;

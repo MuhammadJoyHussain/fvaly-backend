@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const routes = require('./routes/index');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
@@ -11,10 +12,6 @@ const connectDB = require('./config/db');
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
-// Route files
-const products = require('./routes/products');
-const users = require('./routes/users');
-const auth = require('./routes/auth');
 
 // Connect DB
 connectDB();
@@ -39,9 +36,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount router
-app.use('/api/products', products);
-app.use('/api/users.', users);
-app.use('/api/auth', auth);
+app.use('/api', routes);
 
 app.use(errorHandler);
 
