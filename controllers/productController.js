@@ -34,3 +34,35 @@ module.exports.createProduct = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('Fild can not be blank'), 404);
     }
 });
+
+module.exports.getProduct = asyncHandler(async (req, res, next) => {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        return next(
+            new ErrorResponse(`Product not found with id of ${req.params.id}`, 404)
+        );
+    }
+    res.status(200).json({
+        success: true,
+        data: product
+    });
+});
+
+module.exports.deleteProduct = asyncHandler(async (req, res, next) => {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        return next(
+            new ErrorResponse(`Product not found with id of ${req.params.id}`, 404)
+        );
+    }
+
+    await product.remove();
+
+    res.status(200).json({
+        success: true,
+        data: {}
+    });
+});
+
