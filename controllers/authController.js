@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleweres/async');
 const User = require('../models/User');
+const { createResponse } = require('../utils/responseGenerate');
 
 exports.register = asyncHandler(async (req, res, next) => {
     const { name, email, password, role } = req.body;
@@ -37,8 +38,15 @@ exports.login = asyncHandler(async (req, res, next) => {
     if (!isMatch) {
         return next(new ErrorResponse('Invalid credentials', 401));
     }
-
-    sendTokenResponse(user, 200, res);
+    const token = user.getSignedJwtToken();
+    res.status(200).json(createResponse({
+        name: user.name,
+        email: user.email,
+        id: user._id,
+        role: user.role,
+        status: user.status,
+        token
+    }, 'Login successful!', false, token));
 });
 
 exports.getMe = asyncHandler(async (req, res, next) => {

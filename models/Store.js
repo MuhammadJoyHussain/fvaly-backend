@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
-mongoose.Promise = global.Promise;
 
-const StoreSchema = new Schema(
+const StoreSchema = new mongoose.Schema(
 	{
 		name: {
 			type: String,
@@ -19,7 +17,7 @@ const StoreSchema = new Schema(
 			required: true
 		},
 		owner: {
-			type: Schema.ObjectId,
+			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
 		},

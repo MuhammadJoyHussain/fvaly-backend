@@ -18,22 +18,21 @@ module.exports.getProducts = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.createProduct = asyncHandler(async (req, res, next) => {
-    try {
-        const body = req.body;
-        // const upload = await cloudinary.uploader.upload(req.file.path);
 
-        // body.image = upload.public_id;
-        const product = new Product(body);
 
-        await product.save();
-        return res.status(201).json({
-            success: true,
-            data: product,
-            error: false
-        });
-    } catch (err) {
-        return next(err);
-    }
+    const body = req.body;
+    const upload = await cloudinary.uploader.upload(req.file.path);
+
+    body.image = upload.public_id;
+
+    const product = new Product(body);
+
+    const createProduct = await product.save();
+
+    return res.status(201).json({
+        success: true,
+        data: createProduct
+    });
 });
 
 module.exports.getProduct = asyncHandler(async (req, res, next) => {
@@ -63,8 +62,10 @@ module.exports.updateProduct = asyncHandler(async (req, res, next) => {
         new: true,
         runValidators: true
     });
-
-    res.status(200).json({ success: true, data: product, error: false });
+    res.status(200).json({
+        success: true,
+        data: product
+    });
 });
 
 module.exports.deleteProduct = asyncHandler(async (req, res, next) => {

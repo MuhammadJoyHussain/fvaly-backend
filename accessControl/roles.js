@@ -11,6 +11,8 @@ exports.roles = (function () {
 		.createOwn('product')
 		.updateOwn('product')
 		.readAny('product')
+		.createOwn('category')
+		.readOwn('store')
 		.createOwn('store')
 		.updateOwn('store')
 		.deleteOwn('store')
@@ -26,6 +28,7 @@ exports.roles = (function () {
 		.createAny('user')
 		.readAny('user')
 		.updateAny('user')
+		.readAny('store')
 		.deleteAny('order')
 		.readAny('order');
 

@@ -3,8 +3,12 @@ const Store = require('../models/Store');
 const cloudinary = require('../lib/cloudinary');
 
 module.exports.createStore = async (req, res, next) => {
-	const owner = req.user._id;
-	const body = { ...req.body, owner };
+	req.body.owner = req.user.id;
+
+	const body = req.body;
+	const upload = await cloudinary.uploader.upload(req.file.path);
+
+	body.image = upload.public_id;
 
 	const store = await Store.create(body);
 
@@ -41,8 +45,8 @@ module.exports.getStoreById = async (req, res, next) => {
 module.exports.getStores = async (req, res, next) => {
 	try {
 		const query = req.query;
-		const stores = await Store.find(query);
-		return res.json({ success: true, data: stores });
+		const store = await Store.find(query);
+		return res.json({ success: true, data: store });
 	} catch (err) {
 		next(err);
 	}

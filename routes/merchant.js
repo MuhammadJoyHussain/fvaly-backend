@@ -15,12 +15,5 @@ router
         getProducts
     );
 
-router
-    .route('/stats')
-    .get(
-        protect,
-        accessControl.grantAccess('createOwn', 'product'),
-        getStats
-    );
 
 module.exports = router;
