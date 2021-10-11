@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Dev logging middlewere
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'producttion') {
     app.use(morgan('dev'));
 }
 
@@ -46,7 +46,7 @@ app.use('/api/product', product);
 app.use('/api/store', store);
 app.use('/api/merchant', merchant);
 app.use('/api/dashboard', dashboard);
-app.use('/api/users.', users);
+app.use('/api/users', users);
 app.use('/api/auth', auth);
 
 app.use(errorHandler);
