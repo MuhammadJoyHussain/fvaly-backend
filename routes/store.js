@@ -1,31 +1,25 @@
 const express = require('express');
-const { getStores, getStoreById, createStore, deleteStore } = require('../controllers/storeController');
-const accessControl = require('../accessControl');
 const uploader = require('../lib/multer');
+const { getStores, getStoreById, createStore, deleteStore } = require('../controllers/storeController');
+const Store = require('../models/Store');
+
+const product = require('./product');
 
 const router = express.Router();
+const advancedResults = require('../middleweres/advancedResults');
 
-const { protect } = require('../middleweres/auth');
+router.use('/:storeId/product', product);
 
 router
 	.route('/')
-	.get(getStores)
+	.get(advancedResults(Store, 'product'), getStores)
 	.post(
-		protect,
-		accessControl.grantAccess('createOwn', 'store'),
 		uploader.single('image'),
-		createStore
-	);
-
+		createStore);
 
 router
 	.route('/:id')
-	.get(getStoreById)
-	.delete(
-		protect,
-		accessControl.grantAccess('deleteOwn', 'store'),
-		deleteStore
-	);
+	.get(getStoreById);
 
 
 

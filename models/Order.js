@@ -1,8 +1,8 @@
-const mongoose      =   require('mongoose');
-const {Schema}      =   mongoose;
-mongoose.Promise    =   global.Promise;
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+mongoose.Promise = global.Promise;
 
-const OrderSchema    =   new Schema ({
+const OrderSchema = new Schema({
 	userId: {
 		type: Schema.Types.ObjectId,
 		required: true,
@@ -19,6 +19,6 @@ const OrderSchema    =   new Schema ({
 		enum: ['pending', 'verified', 'delivered', 'rejected']
 	},
 	totalAmount: Number
-}, {timestamp: true});
+}, { timestamp: true });
 
 module.exports = mongoose.model('Order', OrderSchema);

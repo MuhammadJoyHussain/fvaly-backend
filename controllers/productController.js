@@ -1,42 +1,58 @@
 const ErrorResponse = require('../utils/errorResponse');
 const cloudinary = require('../lib/cloudinary');
 const Product = require('../models/Product');
+const Store = require('../models/Store');
 const asyncHandler = require('../middleweres/async');
 
 
 module.exports.getProducts = asyncHandler(async (req, res, next) => {
-    try {
-        const query = req.query;
-        const products = await Product.find(query);
-        res.status(200).json({
-            success: true,
-            data: products
-        });
-    } catch (err) {
-        return next(new ErrorResponse('Products not found'), 404);
+    let query;
+
+    if (req.params.storeId) {
+        query = Product.find({ store: req.params.storeId });
+    } else {
+        query = Product.find().populate('store');
     }
+
+    const products = await query;
+
+    res.status(200).json({
+        success: true,
+        count: products.length,
+        data: products
+    });
 });
 
 module.exports.createProduct = asyncHandler(async (req, res, next) => {
+    req.body.store = req.params.storeId;
 
+    const store = await Store.findById(req.params.storeId);
+
+    if (!store) {
+        return next(
+            new ErrorResponse(`Store not found with id of ${req.params.storeId}`, 404)
+        );
+    }
 
     const body = req.body;
     const upload = await cloudinary.uploader.upload(req.file.path);
 
     body.image = upload.public_id;
 
-    const product = new Product(body);
+    const product = await Product.create(req.body);
 
-    const createProduct = await product.save();
 
     return res.status(201).json({
         success: true,
-        data: createProduct
+        data: product
     });
 });
 
 module.exports.getProduct = asyncHandler(async (req, res, next) => {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate({
+        path: 'store',
+        select: 'name location'
+    });
 
     if (!product) {
         return next(

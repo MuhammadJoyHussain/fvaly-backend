@@ -3,7 +3,7 @@ const express = require('express');
 const { createProduct, getProducts, getProduct, updateProduct, deleteProduct } = require('../controllers/productController');
 const uploader = require('../lib/multer');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 const { protect } = require('../middleweres/auth');
 
@@ -11,8 +11,6 @@ router
     .route('/')
     .get(getProducts)
     .post(
-        protect,
-        accessControl.grantAccess('createOwn', 'product'),
         uploader.single('image'),
         createProduct);
 
@@ -22,12 +20,10 @@ router
     .delete(
         protect,
         accessControl.grantAccess('deleteOwn', 'product'),
-        deleteProduct
-    )
+        deleteProduct)
     .put(
         protect,
         accessControl.grantAccess('updateAny', 'product'),
-        updateProduct
-    );
+        updateProduct);
 
 module.exports = router;
