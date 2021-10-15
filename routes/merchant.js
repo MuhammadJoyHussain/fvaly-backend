@@ -1,4 +1,3 @@
-const accessControl = require('../accessControl');
 const express = require('express');
 const { getProducts, getStats } = require('../controllers/merchantController');
 
