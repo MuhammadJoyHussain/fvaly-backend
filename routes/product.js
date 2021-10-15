@@ -5,12 +5,14 @@ const uploader = require('../lib/multer');
 
 const router = express.Router({ mergeParams: true });
 
-const { protect } = require('../middleweres/auth');
+const { protect, authorize } = require('../middleweres/auth');
 
 router
     .route('/')
     .get(getProducts)
     .post(
+        protect,
+        authorize('merchant', 'admin'),
         uploader.single('image'),
         createProduct);
 

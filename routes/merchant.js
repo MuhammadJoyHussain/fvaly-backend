@@ -4,14 +4,14 @@ const { getProducts, getStats } = require('../controllers/merchantController');
 
 const router = express.Router();
 
-const { protect } = require('../middleweres/auth');
+const { protect, authorize } = require('../middleweres/auth');
 
 router
     .route
     ('/products')
     .get(
         protect,
-        accessControl.grantAccess('createOwn', 'product'),
+        authorize('merchant'),
         getProducts
     );
 

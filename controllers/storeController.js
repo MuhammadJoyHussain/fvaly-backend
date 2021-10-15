@@ -3,7 +3,7 @@ const Store = require('../models/Store');
 const cloudinary = require('../lib/cloudinary');
 
 module.exports.createStore = async (req, res, next) => {
-	// req.body.owner = req.user.id;
+	req.body.owner = req.user.id;
 
 	const body = req.body;
 	const upload = await cloudinary.uploader.upload(req.file.path);
