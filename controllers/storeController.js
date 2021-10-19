@@ -26,10 +26,6 @@ module.exports.getStores = async (req, res, next) => {
 module.exports.getStoreById = async (req, res, next) => {
 	const store = await Store.findById(req.params.id);
 
-	// if (!store) {
-	// 	return next(new ErrorResponse(`No store found with the id of ${req.params._id}`));
-	// }
-
 	res.status(200).json({ success: true, data: store });
 };
 

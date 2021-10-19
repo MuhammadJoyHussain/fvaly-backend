@@ -6,7 +6,7 @@ const { protect, authorize } = require('../middleweres/auth');
 router.get(
 	'/stats',
 	protect,
-	authorize('mechant'),
+	authorize('merchant'),
 	getDashboardStats
 );
 
