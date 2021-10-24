@@ -9,17 +9,17 @@ const advancedResults = require('../middleweres/advancedResults');
 const { protect, authorize } = require('../middleweres/auth');
 
 router.use(protect);
-router.use(authorize('admin'));
+// router.use(authorize('admin'));
 
 router.
     route('/')
-    .get(advancedResults(User), getUsers)
-    .post(createUser);
+    .get(authorize('admin'), advancedResults(User), getUsers)
+    .post(authorize('admin'), createUser);
 
 router.
     route('/:id')
-    .get(getUser)
-    .put(updateUser)
-    .delete(deleteUser);
+    .get(authorize('admin', 'merchant'), getUser)
+    .put(authorize('admin'), updateUser)
+    .delete(authorize('admin'), deleteUser);
 
 module.exports = router;

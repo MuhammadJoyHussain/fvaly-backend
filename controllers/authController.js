@@ -52,10 +52,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 exports.getMe = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user.id);
 
-    res.status(200).json({
-        success: true,
-        data: user
-    });
+    res.status(200).json(res.advancedResults);
 });
 
 // Get token from model, create cookie and send response

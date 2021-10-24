@@ -5,7 +5,7 @@ const Store = require('../models/Store');
 
 const product = require('./product');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const advancedResults = require('../middleweres/advancedResults');
 const { protect, authorize } = require('../middleweres/auth');
 

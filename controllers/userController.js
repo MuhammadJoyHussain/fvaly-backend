@@ -13,7 +13,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/auth/users/:id
 // @access  Private/Admin
 exports.getUser = asyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate('stores');
 
     res.status(200).json({
         success: true,
